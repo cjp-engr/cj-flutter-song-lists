@@ -6,11 +6,9 @@ import 'package:cj_itunes_artist/utils/widget_key.dart';
 import 'package:cj_itunes_artist/views/bloc/song_list_view_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
-import 'dart:developer' as developer;
 
 class SongListView extends StatefulWidget {
   const SongListView({Key? key}) : super(key: key);

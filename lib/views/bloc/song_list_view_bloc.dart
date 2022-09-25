@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:cj_itunes_artist/data/db/artist_db_helper.dart';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 
@@ -13,6 +14,7 @@ part 'song_list_view_state.dart';
 
 class SongListViewBloc extends Bloc<SongListViewEvent, SongListViewState> {
   final ArtistRepository artistRepository;
+
   SongListViewBloc({
     required this.artistRepository,
   }) : super(SongListViewState.initial()) {

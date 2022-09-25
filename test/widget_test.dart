@@ -33,10 +33,8 @@ void main() {
     setUp(() {
       mockArtistRepository = MockArtistRepository();
       mockSongListViewBloc = MockSongListViewBloc();
-      // when(() => mockArtistRepository.readSongList('nick+jonas'))
-      //     .thenAnswer((invocation) => Future.value(posts));
-      when(() => mockArtistRepository.readSongList('nick jonas'))
-          .thenAnswer((_) async => posts);
+      when(() => mockArtistRepository.readSongList('nick+jonas'))
+          .thenAnswer((invocation) => Future.value(posts));
     });
 
     testWidgets('Song List state is initial', (tester) async {
@@ -59,7 +57,9 @@ void main() {
       await tester.pumpWidget(const app.MyApp());
 
       await tester.enterText(searchFormField, 'Nick Jonas');
-      await tester.pumpAndSettle(const Duration(seconds: 1));
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pump();
+      // await tester.pumpAndSettle(const Duration(seconds: 1));
       expect(mockSongListViewBloc.state.listStatus, SongListStatus.loading);
       expect(mockSongListViewBloc.state.artistResult.length, 0);
     });
@@ -72,6 +72,8 @@ void main() {
       await tester.pumpWidget(const app.MyApp());
       final searchFormField = find.byKey(const Key(WidgetKey.searchField));
       await tester.enterText(searchFormField, 'Nick Jonas');
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      // await tester.pump();
       await tester.pumpAndSettle(const Duration(seconds: 1));
       expect(find.byKey(const Key(WidgetKey.card)), isNotNull);
       expect(mockSongListViewBloc.state.listStatus, SongListStatus.loaded);
@@ -87,10 +89,11 @@ void main() {
       await tester.pumpWidget(const app.MyApp());
       final searchFormField = find.byKey(const Key(WidgetKey.searchField));
       await tester.enterText(searchFormField, 'jfgdljglfdjfgfdhkhfgeyiry');
+      await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pumpAndSettle(const Duration(seconds: 1));
-      expectLater(mockSongListViewBloc.state.listStatus, SongListStatus.loaded);
-      expectLater(mockSongListViewBloc.state.artistResult.length, 0);
-      // expectLater(
+      expect(mockSongListViewBloc.state.listStatus, SongListStatus.loaded);
+      expect(mockSongListViewBloc.state.artistResult.length, 0);
+      // expect(
       //     find.text('Your search did not match any documents'), findsOneWidget);
     });
 
