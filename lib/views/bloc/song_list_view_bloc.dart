@@ -18,20 +18,20 @@ class SongListViewBloc extends Bloc<SongListViewEvent, SongListViewState> {
   SongListViewBloc({
     required this.artistRepository,
   }) : super(SongListViewState.initial()) {
-    on<SearchButtonPressed>(fetchSongResults);
-    on<ConnectivityStatusSet>(connectivityStatus);
-    on<LocalDatabaseInitial>(databaseInitial);
-    on<ConnectivityInitial>(connectivityInitial);
+    on<SearchButtonPressed>(_fetchSongResults);
+    on<ConnectivityStatusSet>(_connectivityStatus);
+    on<LocalDatabaseInitial>(_databaseInitial);
+    on<ConnectivityInitial>(_connectivityInitial);
   }
 
-  Future<void> connectivityInitial(
+  Future<void> _connectivityInitial(
       ConnectivityInitial event, Emitter<SongListViewState> emit) async {
     ConnectivityResult? cr = await artistRepository.initConnectivity(
         event.connectivity, event.mounted);
     add(ConnectivityStatusSet(result: cr!));
   }
 
-  Future<void> fetchSongResults(
+  Future<void> _fetchSongResults(
       SearchButtonPressed event, Emitter<SongListViewState> emit) async {
     try {
       if (state.connectivityResult != ConnectivityResult.none) {
@@ -56,14 +56,14 @@ class SongListViewBloc extends Bloc<SongListViewEvent, SongListViewState> {
     }
   }
 
-  void connectivityStatus(
+  void _connectivityStatus(
       ConnectivityStatusSet event, Emitter<SongListViewState> emit) {
     emit(state.copyWith(connectivityResult: event.result));
 
     log(event.result.toString());
   }
 
-  Future<void> databaseInitial(
+  Future<void> _databaseInitial(
       LocalDatabaseInitial event, Emitter<SongListViewState> emit) async {
     await DatabaseHandler().readSongs();
     emit(state.copyWith(isDatabaseOpen: true));
